@@ -390,4 +390,83 @@ function renderFonts() {
     return;
   }
 
+  grid.innerHTML = filtered.map(font => {
+    const preview = getPreview(font.name);
+    const isFav = favorites.has(font.name);
+    return `
+      <div class="font-row" onclick="copyFontName('${font.name}')">
+        <div class="font-row-top">
+          <div class="font-meta">
+            <div class="font-name">${font.name}</div>
+            <div class="font-category">${font.category}</div>
+          </div>
+          <div class="font-vibe">${font.vibe}</div>
+          <div class="font-actions" onclick="event.stopPropagation()">
+            <button class="fa-btn ${isFav ? 'fav' : ''}" onclick="toggleFav('${font.name}', this)">
+              ${isFav ? '★ saved' : '☆ save'}
+            </button>
+            <button class="fa-btn" onclick="copySingle('${font.name}')">copy name</button>
+          </div>
+        </div>
+        <div class="font-preview-text" style="font-family:'${font.name}',serif;font-size:${fontSize}px" id="preview-${font.name.replace(/\s/g,'_')}">
+          ${escHtml(preview)}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function updatePreview() {
+  previewText = document.getElementById("searchInput").value;
+  const filtered = getFiltered();
+  filtered.forEach(font => {
+    const el = document.getElementById("preview-" + font.name.replace(/\s/g, "_"));
+    if (el) el.textContent = getPreview(font.name);
+  });
+}
+
+function updateSize() {
+  fontSize = parseInt(document.getElementById("sizeSlider").value);
+  document.getElementById("sizeVal").textContent = fontSize + "px";
+  document.querySelectorAll(".font-preview-text").forEach(el => {
+    el.style.fontSize = fontSize + "px";
+  });
+}
+
+function toggleFav(name, btn) {
+  if (favorites.has(name)) {
+    favorites.delete(name);
+    btn.textContent = "☆ save";
+    btn.classList.remove("fav");
+  } else {
+    favorites.add(name);
+    btn.textContent = "★ saved";
+    btn.classList.add("fav");
+  }
+}
+
+function copyFontName(name) {
+  navigator.clipboard.writeText(name).then(() => toast(`"${name}" copied`));
+}
+
+function copySingle(name) {
+  navigator.clipboard.writeText(name).then(() => toast(`"${name}" copied`));
+}
+
+function copyAll() {
+  const txt = previewText.trim() || "the quick brown fox";
+  navigator.clipboard.writeText(txt).then(() => toast("Text copied to clipboard"));
+}
+
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2000);
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
 
