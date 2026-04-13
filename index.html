@@ -338,4 +338,56 @@ const FONTS = [
   { name: "Yeseva One",          category: "serif",     vibe: "soft and expressive — literary and warm" },
 ];
 
+const CATEGORIES = ["all", "sans", "serif", "display", "handwritten", "monospace"];
+const CATEGORY_LABELS = { all: "All fonts", sans: "Sans-serif", serif: "Serif", display: "Display", handwritten: "Handwritten", monospace: "Monospace" };
+
+let currentFilter = "all";
+let previewText = "";
+let fontSize = 40;
+let favorites = new Set();
+
+const DEFAULT_PREVIEWS = [
+  "the quick brown fox",
+  "hello world",
+  "type something beautiful",
+  "good morning",
+  "stay curious",
+  "this is your font",
+];
+
+function getPreview(fontName) {
+  if (previewText.trim()) return previewText;
+  const idx = FONTS.findIndex(f => f.name === fontName) % DEFAULT_PREVIEWS.length;
+  return DEFAULT_PREVIEWS[idx];
+}
+
+function buildFilters() {
+  const row = document.getElementById("filterRow");
+  row.innerHTML = CATEGORIES.map(c => `
+    <button class="filter-btn ${c === currentFilter ? 'active' : ''}" onclick="setFilter('${c}')">
+      ${CATEGORY_LABELS[c]}
+    </button>
+  `).join("");
+}
+
+function setFilter(cat) {
+  currentFilter = cat;
+  buildFilters();
+  renderFonts();
+}
+
+function getFiltered() {
+  return currentFilter === "all" ? FONTS : FONTS.filter(f => f.category === currentFilter);
+}
+
+function renderFonts() {
+  const filtered = getFiltered();
+  const grid = document.getElementById("fontGrid");
+  document.getElementById("visibleCount").textContent = filtered.length;
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="empty-state"><div class="es-icon">🔍</div><div class="es-text">no fonts in this category</div></div>`;
+    return;
+  }
+
 
