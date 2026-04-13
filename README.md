@@ -27,7 +27,7 @@ Type anything. See it rendered in 24 fonts instantly. Find the one that feels ri
 
 ## Design
 
-Space Grotesk UI · Pure white, black ink, minimal borders · Type foundry / design tool aesthetic. Completely different from Days 01–05.
+Space Grotesk UI · Pure white, black ink, minimal borders · Type foundry / design tool aesthetic. Completely different from Days 01–04.
 
 ## Tech
 
