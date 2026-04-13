@@ -285,4 +285,30 @@ input[type="range"] {
 </style>
 </head>
 <body>
+<header>
+  <div class="logo">Font<span>Feels</span></div>
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Type something to preview all fonts..." oninput="updatePreview()" />
+  </div>
+  <div class="header-right">
+    <div class="size-control">
+      <span class="size-label">size</span>
+      <input type="range" min="20" max="80" value="40" id="sizeSlider" oninput="updateSize()" step="1" />
+      <span class="size-val" id="sizeVal">40px</span>
+    </div>
+    <button class="copy-all-btn" onclick="copyAll()">Copy text</button>
+  </div>
+</header>
+
+<div class="filter-row" id="filterRow"></div>
+
+<div class="preview-hint">
+  <span>showing <span class="ph-count" id="visibleCount">24</span> fonts</span>
+  <span>click any font to copy its name</span>
+</div>
+
+<div class="font-grid" id="fontGrid"></div>
+
+<div class="toast" id="toast"></div>
+
 
